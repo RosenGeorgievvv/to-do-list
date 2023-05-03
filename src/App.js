@@ -3,19 +3,36 @@ import './App.css';
 
 function App() {
   const [todoList, setTodoList] = useState([]);
-  const [newTask, setNewTask] = useState('');  
+  const [newTask, setNewTask] = useState('');
 
-  const handleChange = (event) =>{
+  const handleChange = (event) => {
     setNewTask(event.target.value)
+  };
+
+  const addTask = () => {
+    const task = {
+      id: todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1,
+      taskName: newTask
+    }
+    setTodoList([...todoList, task]);
+  }
+
+  const deleteTask = (id) => {
+    setTodoList(todoList.filter((task) => task.id !== id));
   }
   return (
     <div className="App">
       <div className='addTask'>
-        <input onChange={handleChange}/>
-        <button>Add Task</button>
+        <input placeholder='Message' type='text' onChange={handleChange} />
+        <button onClick={addTask}>Add Task</button>
       </div>
       <div className='list'></div>
-      {newTask}
+      {todoList.map((task) => {
+        return <div>
+          <h1>{task.taskName}</h1>
+          <button onClick={() => deleteTask(task.id)}>Delete Task</button>
+        </div>
+      })}
     </div>
   );
 }
